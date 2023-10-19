@@ -5,11 +5,11 @@ from .models import Profile
 # Create your tests here.
 class ProfileTestCase(TestCase):
     def setUp(self):
-        # Create two users
+        # Create users
         User.objects.create(username='user1')
         User.objects.create(username='user2')
 
-        # add followers
+        # Create profiles
         Profile.objects.create(user=User.objects.get(username='user1')).followers.add(User.objects.get(username='user2'))
         Profile.objects.create(user=User.objects.get(username='user2')).followers.add(User.objects.get(username='user2'))
 
@@ -18,3 +18,4 @@ class ProfileTestCase(TestCase):
         self.assertTrue(Profile.objects.get(user=User.objects.get(username='user1')).is_valid_profile())
         profile = Profile.objects.get(user=User.objects.get(username='user2'))
         self.assertFalse(profile.is_valid_profile())
+

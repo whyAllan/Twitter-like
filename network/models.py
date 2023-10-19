@@ -12,9 +12,15 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+    # Assert that the user cannot follow themselves
     def is_valid_profile(self):
         return not self.following.filter(username=self.user.username).exists() and not self.followers.filter(username=self.user.username).exists()
+
+    # Assert that the user cannot follow the same user twice
+    def is_following(self, user):
+        return self.following.filter(username=user.username).exists()
+
+
 class Post(models.Model):
     post = models.TextField()
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")

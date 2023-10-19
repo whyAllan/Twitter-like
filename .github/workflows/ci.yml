@@ -6,7 +6,7 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - name: Run tests
-              run: 
+              run: |
                 pip install django
                 pip install Pillow
                 python manage.py test

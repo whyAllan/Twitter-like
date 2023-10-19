@@ -14,7 +14,7 @@ class Profile(models.Model):
         return self.user.username
     # Assert that the user cannot follow themselves
     def is_valid_profile(self):
-        return self.following.filter(username=self.user.username).exists() and not self.followers.filter(username=self.user.username).exists()
+        return not self.following.filter(username=self.user.username).exists() and not self.followers.filter(username=self.user.username).exists()
 
     # Assert that the user cannot follow the same user twice
     def is_following(self, user):

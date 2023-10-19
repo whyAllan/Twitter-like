@@ -8,5 +8,5 @@ jobs:
             - name: Run tests
               run: 
                 pip install django
-                python -m pip install Pillow
+                pip install Pillow
                 python manage.py test

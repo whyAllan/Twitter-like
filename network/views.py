@@ -8,10 +8,6 @@ from django import forms
 
 from .models import User, Profile, Post, Comments
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['bio', 'profile_pic']
 
 def index(request):
     if request.user.is_authenticated:
@@ -76,12 +72,11 @@ def register(request):
     
 def create_profile(request):
     if request.method == "POST":
-        profile_form = ProfileForm(request.POST)
-        if profile_form.is_valid():
-            profile = profile_form.save(commit=False)
-            profile.user = request.user
-            profile.save()
-            return HttpResponseRedirect(reverse("index"))
-    return render(request, "network/profile.html", {
-        "profile": ProfileForm
-    })
+         # Create a new Profile object with the submitted data
+        bio = request.POST.get("bio")
+        pic = request.POST.get('pic')
+        user = request.user
+        profile = Profile(user=user, bio=bio, profile_pic=pic)
+        profile.save()
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "network/profile.html")

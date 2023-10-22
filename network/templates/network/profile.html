@@ -1,41 +1,59 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <form acion="{% url 'create_profile' %}" method="post">
+    <div id="image_profile">
+        <img id="image-preview" src="" alt="Preview Image">
+    </div>
+    <div>
+        <input type="file" id="image-upload" accept="image/*">
+    </div>
+    <button class="btn-save">Save image</button>
+    <form action="{% url 'create_profile' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div id="image_profile">
-            <img id="image-preview" src="" alt="Preview Image">
+        <div class="hide">
+            <input type="hidden" id="pic" name="pic">
         </div>
-        <input type="file" id="image-upload" name="image" accept="image/*">
         <div class="form-floating">
-            <textarea class="form-control" placeholder="bio" id="floatingTextarea2" style="height: 100px; width: 400px;"></textarea>
+            <textarea name="bio" class="form-control" placeholder="bio" id="floatingTextarea2" style="height: 100px; width: 400px;"></textarea>
         </div>
         <br> 
         <button type="submit" class="btn btn-secondary">Submit</button>       
     </form>
-
+    <br>
+    <small class="alert alert-success" role="alert" style="display: none; width: 600px;"></small>
 
     <script>
         const image = document.getElementById('image-preview');
-    const input = document.getElementById('image-upload');
-    
-    input.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const reader = new FileReader();
+        const input = document.getElementById('image-upload');
+        const saveButton = document.querySelector('.btn-save');
+        const picInput = document.getElementById('pic');
+        const alertMessage = document.querySelector('.alert');
 
-        reader.onload = function(event) {
-            image.src = event.target.result;
-            const cropper = new Cropper(image, {
-                aspectRatio: 1, // Crop to a square shape
-                viewMode: 1, // Restrict the crop box to the container
-                minCropBoxWidth: 100, // Minimum width of the crop box
-                minCropBoxHeight: 100, // Minimum height of the crop box
-                responsive: true, // Enable responsive behavior
-                // Additional options...
-            });
-        };
+        input.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
 
-        reader.readAsDataURL(file);
-    });
+            reader.onload = function(event) {
+                image.src = event.target.result;
+                const cropper = new Cropper(image, {
+                    aspectRatio: 1, // Crop to a square shape
+                    viewMode: 1, // Restrict the crop box to the container
+                    minCropBoxWidth: 100, // Minimum width of the crop box
+                    minCropBoxHeight: 100, // Minimum height of the crop box
+                    responsive: true, // Enable responsive behavior
+                    // Additional options...
+                });
+
+                saveButton.addEventListener('click', function() {
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                    const croppedImageDataUrl = croppedCanvas.toDataURL('image/jpeg');
+                    picInput.value = croppedImageDataUrl;
+                    alertMessage.textContent = 'Image uploaded successfully!';
+                    alertMessage.style.display = 'block';
+                });
+            };
+
+            reader.readAsDataURL(file);
+        });
     </script>
 {% endblock %}

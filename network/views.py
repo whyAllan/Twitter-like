@@ -14,9 +14,13 @@ class ProfileForm(forms.ModelForm):
         fields = ['bio', 'profile_pic']
 
 def index(request):
-    return render(request, "network/index.html", {
-       "profile": Profile.objects.all()
-    })
+    if request.user.is_authenticated:
+        return render(request, "network/index.html", {
+        "profile": Profile.objects.filter(user=request.user)
+        })
+    else:
+        return render(request, "network/index.html", {
+        })
 
 
 def login_view(request):
@@ -77,7 +81,7 @@ def create_profile(request):
             profile = profile_form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return HttpResponseRedirect(reverse("profile"))
+            return HttpResponseRedirect(reverse("index"))
     return render(request, "network/profile.html", {
         "profile": ProfileForm
     })

@@ -3,12 +3,20 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import ListView
+from django import forms
 
-from .models import User
+from .models import User, Profile, Post, Comments
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_pic']
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+       "profile": Profile.objects.all()
+    })
 
 
 def login_view(request):
@@ -61,3 +69,15 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+    
+def create_profile(request):
+    if request.method == "POST":
+        profile_form = ProfileForm(request.POST)
+        if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+            return HttpResponseRedirect(reverse("profile"))
+    return render(request, "network/profile.html", {
+        "profile": ProfileForm
+    })

@@ -10,8 +10,9 @@ class ProfileTestCase(TestCase):
         User.objects.create(username='user2')
 
         # Create profiles
-        Profile.objects.create(user=User.objects.get(username='user1')).followers.add(Profile.objects.get(user='user2'))
-        Profile.objects.create(user=User.objects.get(username='user2')).followers.add(Profile.objects.get(user='user2'))
+        id2 = User.objects.get(username='user2').id
+        Profile.objects.create(user=User.objects.get(username='user2')).followers.add(Profile.objects.get(user=id2))
+        Profile.objects.create(user=User.objects.get(username='user1')).followers.add(Profile.objects.get(user=id2))
 
     def test_is_valid_profile(self):
         # user1 should be valid and user2 should not 

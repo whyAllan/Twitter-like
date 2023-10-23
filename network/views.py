@@ -13,10 +13,11 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['post']
         widgets = {
-            'post': forms.TextInput(attrs={
-                'class': 'form-control-plaintext',
-                'id': 'floatingEmptyPlaintextInput',
-                'placeholder': "What's good?"
+            'post': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'What is on your mind?',
+                'id': 'floatingTextarea',
+                'style':'width: 300px; height: 100px; border-radius: 10px; margin-top: 30%; margin-left: 10px;'
             })
         }
 
@@ -35,8 +36,9 @@ def index(request):
     if request.user.is_authenticated:
         return render(request, "network/index.html", {
         "profile": Profile.objects.get(user=request.user.id),
-        "post_form": PostForm()
-        })
+        "post_form": PostForm(),
+        'posts': Post.objects.all()
+         })
     else:
         return render(request, "network/index.html", {
         })

@@ -20,9 +20,26 @@
               <button type="submit" class="btn btn-primary">Post</button>
             </form>
             </div>
-          </div>
-            
+          </div> 
         {% endif %}
+        <div class="posts_index">
+            {% for post in posts %}
+                <div class="post">
+                    <div class="card" id="card_index_post">
+                        <div class="card-body">
+                            <div class="profile-photo">
+                                <img src="{{ post.poster.profile_pic }}" alt="">
+                            </div>
+                          <h5 class="card-title">{{ post.poster.username }}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
+                          <p class="card-text">{{ post.post }}</p>
+                        </div>
+                      </div>
+                </div>
+                <br>
+            {% endfor %}
+
+        </div>
 
     {% endif %}
 

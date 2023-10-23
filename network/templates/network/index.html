@@ -6,9 +6,24 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'create_profile' %}">customize profle</a>
         </li>
+        {% else %}
+        <div class="new-tweet">
+            <div class="profile-photo">
+              <img src="{{ profile.profile_pic }}" alt="">
+            </div>
+            <div class="input-container">
+            <form action="{% url 'index' %}" method="POST">
+              <div class="form-floating mb-3">
+                {% csrf_token %}
+                {{ post_form.post }}
+              </div>
+              <button type="submit" class="btn btn-primary">Post</button>
+            </form>
+            </div>
+          </div>
+            
         {% endif %}
-    {% else %}
-        <h1>Welcome, Stranger!</h1>
+
     {% endif %}
 
 {% endblock %}

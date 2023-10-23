@@ -8,11 +8,34 @@ from django import forms
 
 from .models import User, Profile, Post, Comments
 
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['post']
+        widgets = {
+            'post': forms.TextInput(attrs={
+                'class': 'form-control-plaintext',
+                'id': 'floatingEmptyPlaintextInput',
+                'placeholder': "What's good?"
+            })
+        }
 
 def index(request):
+    """ Display and create a new Post """
+    if request.method == "POST":
+        # Create a new Post
+        contente = PostForm(request.POST)
+        if contente.is_valid():
+            post = contente.save(commit=False)
+            post.poster = request.user
+            post.save()
+        return HttpResponseRedirect(reverse("index"))
+
+    # Display homepage
     if request.user.is_authenticated:
         return render(request, "network/index.html", {
-        "profile": Profile.objects.filter(user=request.user)
+        "profile": Profile.objects.get(user=request.user.id),
+        "post_form": PostForm()
         })
     else:
         return render(request, "network/index.html", {

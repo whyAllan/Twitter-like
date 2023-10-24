@@ -2,7 +2,7 @@
 
 {% block body %}
   {% if user.is_authenticated %}
-        {% if not profile %}
+        {% if not profile. %}
         <li class="nav-item">
             <a class="nav-link" href="{% url 'create_profile' %}">customize profle</a>
         </li>

@@ -28,19 +28,21 @@ def index(request):
         contente = PostForm(request.POST)
         if contente.is_valid():
             post = contente.save(commit=False)
-            post.poster = request.user
+            post.poster = Profile.objects.get(user=request.user.id)
             post.save()
         return HttpResponseRedirect(reverse("index"))
 
     # Display homepage
-    if request.user.is_authenticated:
+    profile = Profile.objects.get(user=request.user.id)
+    if profile:
         return render(request, "network/index.html", {
-        "profile": Profile.objects.get(user=request.user.id),
+        "profile": profile,
         "post_form": PostForm(),
         'posts': Post.objects.all()
          })
     else:
         return render(request, "network/index.html", {
+            "posts": Post.objects.all()
         })
 
 
@@ -90,18 +92,30 @@ def register(request):
             return render(request, "network/register.html", {
                 "message": "Username already taken."
             })
+        # Create Profile
+        profile  = Profile.objects.create(user=user)
+        profile.save()
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
     
 def create_profile(request):
+    """ Create and update profile """
     if request.method == "POST":
-         # Create a new Profile object with the submitted data
+         # Create or update profile
         bio = request.POST.get("bio")
         pic = request.POST.get('pic')
         user = request.user
-        profile = Profile(user=user, bio=bio, profile_pic=pic)
-        profile.save()
+        try:
+            profile = Profile(user=user, bio=bio, profile_pic=pic)
+            profile.save()
+        except IntegrityError:
+            profile = Profile.objects.get(user=user)
+            profile.bio = bio
+            profile.profile_pic = pic
+            profile.save()
         return HttpResponseRedirect(reverse("index"))
+    
+    # Display profile page
     return render(request, "network/profile.html")

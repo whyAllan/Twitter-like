@@ -13,8 +13,8 @@ const image = document.getElementById('image-preview');
                 const cropper = new Cropper(image, {
                     aspectRatio: 1, // Crop to a square shape
                     viewMode: 1, // Restrict the crop box to the container
-                    minCropBoxWidth: 100, // Minimum width of the crop box
-                    minCropBoxHeight: 100, // Minimum height of the crop box
+                    minCropBoxWidth: 300, // Minimum width of the crop box
+                    minCropBoxHeight: 300, // Minimum height of the crop box
                     responsive: true, // Enable responsive behavior
                     // Additional options...
                 });

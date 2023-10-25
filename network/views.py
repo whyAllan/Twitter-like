@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView
 from django import forms
+from django.conf import settings
 
 from .models import User, Profile, Post, Comments
 
@@ -33,10 +34,9 @@ def index(request):
         return HttpResponseRedirect(reverse("index"))
 
     # Display homepage
-    profile = Profile.objects.get(user=request.user.id)
-    if profile:
+    if request.user.is_authenticated:
         return render(request, "network/index.html", {
-        "profile": profile,
+        "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
         'posts': Post.objects.all()
          })

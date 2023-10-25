@@ -2,11 +2,10 @@
 
 {% block body %}
   {% if user.is_authenticated %}
-        {% if not profile. %}
+
         <li class="nav-item">
             <a class="nav-link" href="{% url 'create_profile' %}">customize profle</a>
         </li>
-        {% else %}
         <div class="new-tweet">
             <div class="profile-photo">
               <img src="{{ profile.profile_pic }}" alt="">
@@ -21,7 +20,7 @@
             </form>
             </div>
           </div> 
-        {% endif %}
+
         <div class="posts_index">
             {% for post in posts %}
                 <div class="post">

@@ -1,14 +1,20 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.conf import settings
+from PIL import Image
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    following = models.ManyToManyField('self', blank=True)
-    followers = models.ManyToManyField('self', blank=True)
+    following = models.ManyToManyField('self', blank=True, related_name="following_to", symmetrical=False)
+    followers = models.ManyToManyField('self', blank=True, related_name="followed_by", symmetrical=False)
     bio = models.TextField(blank=True)
-    profile_pic = models.ImageField(upload_to="media/", default="standard.png")
+    profile_pic = models.ImageField(upload_to="profile_pics/", blank=True)
+
+    def get_profile_pic_url(self):
+        if self.profile_pic:
+            return self.profile_pic.url
+        return settings.STATIC_URL + "standard.jpg"
 
     def __str__(self):
         return self.user.username

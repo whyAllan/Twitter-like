@@ -3,9 +3,9 @@
 {% block body %}
   {% if user.is_authenticated %}
 
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'create_profile' %}">customize profle</a>
-        </li>
+        <nav class="navbar bg-light">
+            <a class="navbar-brand" style="color: gray; background-color: rgb(230, 218, 185);" href="{% url 'create_profile' %}">customize profile</a>
+        </nav>
         <div class="new-tweet">
             <div class="profile-photo">
               {% if profile.profile_pic %}
@@ -23,7 +23,8 @@
               <button type="submit" class="btn btn-primary">Post</button>
             </form>
             </div>
-          </div> 
+          </div>
+  {% endif %}
 
         <div class="posts_index">
             {% for post in posts %}
@@ -44,6 +45,5 @@
 
         </div>
 
-    {% endif %}
 
 {% endblock %}

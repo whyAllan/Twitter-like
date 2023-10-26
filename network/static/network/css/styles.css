@@ -38,12 +38,14 @@
   }
 
 .posts_index {
-    height: 100%;
-    margin: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+  height: 100%;
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-items: center;
   }
 
   #card_index_post {

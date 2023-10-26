@@ -139,5 +139,6 @@ def profile(request, username):
         return HttpResponseRedirect(reverse("profile", args=(username,)))
     # Display profile
     return render(request, "network/display_profile.html", {
-        "profile": Profile.objects.get(user=User.objects.get(username=username))
+        "profile": Profile.objects.get(user=User.objects.get(username=username)),
+        "posts": Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=username)))
     })

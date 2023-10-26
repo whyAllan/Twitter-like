@@ -34,8 +34,8 @@
                             <div class="profile-photo">
                                 <img src="{{ post.poster.profile_pic }}" alt="">
                             </div>
-                          <h5 class="card-title">{{ post.poster.username }}</h5>
-                          <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
+                          <h6 class="card-title">{{ post.poster.user.username }}</h6>
+                          <small class="card-subtitle mb-2 text-muted">{{ post.created_at }}</small>
                           <p class="card-text">{{ post.post }}</p>
                         </div>
                       </div>

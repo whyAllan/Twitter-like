@@ -1,0 +1,26 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div id="image_profile">
+        <img id="image-preview" src="">
+    </div>
+    <div>
+        <input type="file" id="image-upload" accept="image/*">
+    </div>
+    <button class="btn-save">Save image</button>
+    <form action="{% url 'create_profile' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="hide">
+            <input type="hidden" id="pic" name="pic">
+        </div>
+        <div class="form-floating">
+            <textarea name="bio" class="form-control" placeholder="bio" id="floatingTextarea2" style="height: 100px; width: 400px;"></textarea>
+        </div>
+        <br> 
+        <button type="submit" class="btn btn-secondary">Submit</button>       
+    </form>
+    <br>
+    <small class="alert alert-success" role="alert" style="display: none; width: 600px;"></small>
+
+    <script src="/../../static/network/js/profile.js"></script>
+{% endblock %}

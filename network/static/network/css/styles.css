@@ -47,9 +47,18 @@
   }
 
   #card_index_post {
-    display: block;
     width: 900px;
-    height: 140px;
+    height: auto;
     margin: 10px; 
   }
+
+.profile {
+  display: flex;
   
+}
+
+#profile_card_display {
+  width: 50%;
+  margin: 10px;
+  display:block;
+}

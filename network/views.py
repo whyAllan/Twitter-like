@@ -118,4 +118,26 @@ def create_profile(request):
         return HttpResponseRedirect(reverse("index"))
     
     # Display profile page
-    return render(request, "network/profile.html")
+    return render(request, "network/profile_create.html")
+
+def profile(request, username):
+    """ Display profile/follow and unfollow user """
+    if request.method == "POST":
+        # Follow or unfollow
+        follow = request.POST['follow']
+        if follow == 'follow':
+            profile = Profile.objects.get(user=User.objects.get(username=username))
+            user = Profile.objects.get(user=request.user.id)
+            profile.followers.add(user)
+            user.following.add(profile)
+        
+        elif follow == 'unfollow':
+            profile = Profile.objects.get(user=User.objects.get(username=username))
+            user = Profile.objects.get(user=request.user.id)
+            profile.followers.remove(user)
+            user.following.remove(profile)
+        return HttpResponseRedirect(reverse("profile", args=(username,)))
+    # Display profile
+    return render(request, "network/display_profile.html", {
+        "profile": Profile.objects.get(user=User.objects.get(username=username))
+    })

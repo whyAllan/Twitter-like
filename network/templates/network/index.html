@@ -2,16 +2,12 @@
 {% load static %}
 {% block body %}
   {% if user.is_authenticated %}
-
-        <nav class="navbar bg-light">
-            <a class="navbar-brand" style="color: gray; background-color:azure;" href="{% url 'create_profile' %}">customize profile</a>
-        </nav>
         <div class="new-tweet">
             <div class="profile-photo">
               {% if profile.profile_pic %}
-                  <img src="{{ profile.profile_pic }}" alt="">
+                 <a href="{% url 'profile' request.user.username %}"><img src="{{ profile.profile_pic }}" alt=""></a>
               {% else %}
-              <img src="{% static 'network/images/standard.jpg' %}" alt="">
+              <a href="{% url 'profile' request.user.username %}"><img src="{% static 'network/images/standard.jpg' %}" alt=""></a>
               {% endif %}
             </div>
             <div class="input-container">
@@ -24,26 +20,10 @@
             </form>
             </div>
           </div>
-  {% endif %}
-
-        <div class="posts_index">
-            {% for post in posts %}
-                <div class="post">
-                    <div class="card" id="card_index_post">
-                        <div class="card-body">
-                            <div class="profile-photo">
-                                <img src="{% if post.poster.profile_pic %}{{ post.poster.profile_pic }}{% else %}{% static 'network/images/standard.jpg' %}{% endif %}" alt="">
-                            </div>
-                          <h6 class="card-title"><a href="{% url 'profile' post.poster.user.username %}" style="color: grey;">@{{ post.poster.user.username }}</a></h6>
-                          <small class="card-subtitle mb-2 text-muted">{{ post.created_at|timesince|default:"Just now"  }} ago</small>
-                          <p class="card-text">{{ post.post }}</p>
-                        </div>
-                      </div>
-                </div>
-                <br>
-            {% endfor %}
-
-        </div>
-
-
+  {% endif %}    
+  {% include "network/tweets.html" %} 
 {% endblock %}
+
+     
+
+

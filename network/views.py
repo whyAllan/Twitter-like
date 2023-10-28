@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views.generic import ListView
 from django import forms
 from django.conf import settings
-
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from .models import User, Profile, Post, Comments
 
 class PostForm(forms.ModelForm):
@@ -21,6 +21,25 @@ class PostForm(forms.ModelForm):
                 'style':'width: 300px; height: 100px; border-radius: 10px; margin-top: 30%; margin-left: 10px;'
             })
         }
+class PostListView(ListView):
+    paginate_by = 10
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'network/tweets.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.order_by('-created_at')
+        paginator = Paginator(queryset, self.paginate_by)
+
+        page_number = self.request.GET.get('page')
+        if page_number == '':
+            return queryset
+        try:
+            page_number = int(page_number)
+        except (TypeError, ValueError):
+            page_number = 1
+        posts = paginator.get_page(page_number)
+        return posts
 
 def index(request):
     """ Display and create a new Post """
@@ -38,11 +57,9 @@ def index(request):
         return render(request, "network/index.html", {
         "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
-        'posts': Post.objects.all()
-         })
+        })
     else:
         return render(request, "network/index.html", {
-            "posts": Post.objects.all()
         })
 
 
@@ -115,7 +132,7 @@ def create_profile(request):
             profile.bio = bio
             profile.profile_pic = pic
             profile.save()
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("profile", args=(user.username,)))
     
     # Display profile page
     return render(request, "network/profile_create.html")
@@ -140,5 +157,13 @@ def profile(request, username):
     # Display profile
     return render(request, "network/display_profile.html", {
         "profile": Profile.objects.get(user=User.objects.get(username=username)),
-        "posts": Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=username)))
+        "posts": Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=username))).order_by('-created_at')
+    })
+
+def following_tweets(request):
+    """ Display following tweets """
+    return render(request, "network/index.html", {
+        "profile": Profile.objects.get(user=request.user.id),
+        "post_form": PostForm(),
+        "posts": Post.objects.filter(poster__in=Profile.objects.get(user=request.user.id).following.all()).order_by('-created_at')
     })

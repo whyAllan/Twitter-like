@@ -11,12 +11,16 @@
                   <h6 class="card-title"><a href="{% url 'profile' post.poster.user.username %}" style="color: grey;">@{{ post.poster.user.username }}</a></h6>
                   <small class="card-subtitle mb-2 text-muted">{{ post.created_at|timesince|default:"Just now"}} ago</small>
                   <p class="card-text">{{ post.post }}</p>
-                  <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i> {{ post.likes.count }}                        
+                  <i id="post{{ post.id }}"> {{ post.likes.count }} </i> <small>likes </small>
+                    <i hx-get="{% url 'like' post.id %}" class="fa fa-thumbs-up" {% if request.user.profile in post.likes.all %} style="color: blue;" {% endif %} hx-swap="innerHTML" hx-target="#post{{ post.id }}" onclick="myFunction(this)"></i>
                   <script src="/../../static/network/js/like.js"></script>
                 </div>
               </div>
         </div>
         <br>
     {% endfor %}
-    <div hx-trigger="revealed" hx-get="{% url 'tweets_view' %}?page={{ page_obj.next_page_number }}" hx-swap="afterend"></div>
-    </div>
+    {% if posts.has_next or page == 0 %}
+        <div hx-trigger="revealed" hx-get="{% url 'tweets_view' page=page|add:1 filter=filter %}" hx-swap="afterend"></div>
+    {% endif %}
+         
+    

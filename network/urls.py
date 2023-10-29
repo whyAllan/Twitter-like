@@ -4,9 +4,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('tweets/?page=<int:page>/', views.PostListView.as_view(), name='post_list_page'),
-    path("tweets/", views.PostListView.as_view(), name="tweets_view"),
+    path('tweets/<int:page>/<str:filter>/', views.posts_view, name='tweets_view'),
     path("", views.index, name="index"),
+    path("likes/<int:post_id>", views.likes, name="like"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),

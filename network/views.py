@@ -3,11 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import ListView
 from django import forms
-from django.conf import settings
-from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.core.paginator import Paginator
 from .models import User, Profile, Post, Comments
+from django.contrib import messages
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -21,25 +20,22 @@ class PostForm(forms.ModelForm):
                 'style':'width: 300px; height: 100px; border-radius: 10px; margin-top: 30%; margin-left: 10px;'
             })
         }
-class PostListView(ListView):
-    paginate_by = 10
-    model = Post
-    context_object_name = 'posts'
-    template_name = 'network/tweets.html'
+def posts_view(request, page, filter):
+    """ Dispaly posts """
+    filter = str(filter)
+    if filter == 'not':
+        context = Post.objects.all().order_by("-created_at")
+    elif filter == 'following':
+        context =  Post.objects.filter(poster__in=Profile.objects.get(user=request.user.id).following.all()).order_by('-created_at')
+    else:
+        context =  Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=filter))).order_by('-created_at')
+    paginator = Paginator(context, 10)
+    return render(request, "network/tweets.html", {
+        "posts": paginator.page(page),
+        "filter": filter,
+        "page": page
+    })
 
-    def get_queryset(self):
-        queryset = self.model.objects.order_by('-created_at')
-        paginator = Paginator(queryset, self.paginate_by)
-
-        page_number = self.request.GET.get('page')
-        if page_number == '':
-            return queryset
-        try:
-            page_number = int(page_number)
-        except (TypeError, ValueError):
-            page_number = 1
-        posts = paginator.get_page(page_number)
-        return posts
 
 def index(request):
     """ Display and create a new Post """
@@ -57,9 +53,13 @@ def index(request):
         return render(request, "network/index.html", {
         "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
+        "page": 0,
+        "filter": 'not'
         })
     else:
         return render(request, "network/index.html", {
+            "page": 0,
+            "filter": 'not'
         })
 
 
@@ -157,7 +157,8 @@ def profile(request, username):
     # Display profile
     return render(request, "network/display_profile.html", {
         "profile": Profile.objects.get(user=User.objects.get(username=username)),
-        "posts": Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=username))).order_by('-created_at')
+        "filter": username,
+        "page": 0
     })
 
 def following_tweets(request):
@@ -165,5 +166,20 @@ def following_tweets(request):
     return render(request, "network/index.html", {
         "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
-        "posts": Post.objects.filter(poster__in=Profile.objects.get(user=request.user.id).following.all()).order_by('-created_at')
+        "filter": 'following',
+        "page": 0
     })
+
+def likes(request, post_id):
+    """ Update likes """
+    if request.user.is_authenticated:
+        user = Profile.objects.get(user=request.user.id)
+        tweet = Post.objects.get(id=post_id)
+        if tweet.likes.filter(id=user.id).exists():
+            tweet.likes.remove(user)
+        else:
+            tweet.likes.add(user)
+    else:
+        return HttpResponseRedirect(reverse("login"))
+    like = Post.objects.get(id=post_id).likes.count()
+    return HttpResponse(like)

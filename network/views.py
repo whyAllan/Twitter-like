@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 from django.core.paginator import Paginator
@@ -22,6 +22,7 @@ class PostForm(forms.ModelForm):
         }
 def posts_view(request, page, filter):
     """ Dispaly posts """
+    # Filter can be either 'not', 'following' or a username
     filter = str(filter)
     if filter == 'not':
         context = Post.objects.all().order_by("-created_at")
@@ -180,6 +181,6 @@ def likes(request, post_id):
         else:
             tweet.likes.add(user)
     else:
-        return HttpResponseRedirect(reverse("login"))
+        return HttpResponse("you must be logged in")
     like = Post.objects.get(id=post_id).likes.count()
     return HttpResponse(like)

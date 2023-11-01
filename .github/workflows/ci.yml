@@ -9,4 +9,5 @@ jobs:
               run: |
                 pip install django
                 pip install Pillow
+                python -m pip install django-htmx
                 python manage.py test

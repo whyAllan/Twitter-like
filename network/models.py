@@ -40,8 +40,7 @@ class Post(models.Model):
     post = models.TextField()
     poster = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     likes = models.ManyToManyField(Profile, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    postcode = models.CharField(max_length=36, default=uuid.uuid4, unique=True, editable=False)   
+    created_at = models.DateTimeField(auto_now_add=True)  
 
     def __str__(self):
         return self.post

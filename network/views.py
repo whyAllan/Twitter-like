@@ -110,9 +110,6 @@ def register(request):
             return render(request, "network/register.html", {
                 "message": "Username already taken."
             })
-        # Create Profile
-        profile  = Profile.objects.create(user=user)
-        profile.save()
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:

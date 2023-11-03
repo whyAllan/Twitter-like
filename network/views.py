@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 from django.core.paginator import Paginator
-from .models import User, Profile, Post, Comments
+from .models import User, Profile, Post, Replies
 from django.contrib import messages
 
 class PostForm(forms.ModelForm):

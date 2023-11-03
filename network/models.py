@@ -3,6 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from PIL import Image
+import uuid
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
@@ -26,17 +30,23 @@ class Profile(models.Model):
     def is_following(self, user):
         return self.following.filter(username=user.username).exists()
 
+# Create a Profile when a User is created
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
 class Post(models.Model):
     post = models.TextField()
     poster = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     likes = models.ManyToManyField(Profile, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)    
+    created_at = models.DateTimeField(auto_now_add=True)
+    postcode = models.CharField(max_length=36, default=uuid.uuid4, unique=True, editable=False)   
 
     def __str__(self):
         return self.post
 
-class Comments(models.Model):
+class Replies(models.Model):
     commenter = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

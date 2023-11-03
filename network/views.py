@@ -122,14 +122,10 @@ def create_profile(request):
         bio = request.POST.get("bio")
         pic = request.POST.get('pic')
         user = request.user
-        try:
-            profile = Profile(user=user, bio=bio, profile_pic=pic)
-            profile.save()
-        except IntegrityError:
-            profile = Profile.objects.get(user=user)
-            profile.bio = bio
-            profile.profile_pic = pic
-            profile.save()
+        profile = Profile.objects.get(user=user)
+        profile.bio = bio
+        profile.profile_pic = pic
+        profile.save()
         return HttpResponseRedirect(reverse("profile", args=(user.username,)))
     
     # Display profile page

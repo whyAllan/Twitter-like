@@ -10,14 +10,14 @@ function like(x) {
 
 // Show the edit form
 document.querySelectorAll("#edit_post").forEach((element) => {
-    element.style.cursor = "pointer";
+    element.style.cursor = "pointer"; 
     element.addEventListener("click", () => {
         const button = element.dataset.post;
         post = document.querySelector(`#post${button}`);
         content = post.innerHTML;
         post.style.display = "none";
         form = document.querySelector(`#form${button}`);
-        form.innerHTML = `<textarea name="content" style="width: 100%; height: 100px;">${content}</textarea><br><button type="submit" class="btn btn-outline-success">Save</button> `;
+        form.innerHTML = `<textarea name="content" style="width: 100%; height: 100px;">${content}</textarea><br><button type="submit" id="save_post" class="btn btn-outline-success">Save</button> `;
         cancel_button = document.createElement("button");
         cancel_button.className = "btn btn-outline-danger";
         cancel_button.innerHTML = "Cancel";
@@ -29,9 +29,18 @@ document.querySelectorAll("#edit_post").forEach((element) => {
             post.style.display = "block";
         })
          // If the user cancels the edit, display the post
-        cancel_button.addEventListener("click", () => {
+        cancel_button.addEventListener("click", (event) => {
+            event.preventDefault();
             form.style.display = "none";
             post.style.display = "block";
         })
-
+        // Let the user send the form with Enter
+        document.addEventListener("keydown", (event) => {
+            if (event.keyCode =='13') {
+                event.preventDefault();
+                document.querySelector("#save_post").click();
+            }
+        })
     })});
+
+    

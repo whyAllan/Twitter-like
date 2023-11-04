@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django import forms
 from django.core.paginator import Paginator
-from .models import User, Profile, Post, Replies
+from .models import User, Profile, Post
 from django.contrib import messages
 import urllib.parse
 class PostForm(forms.ModelForm):
@@ -20,7 +20,7 @@ class PostForm(forms.ModelForm):
                 'style':'width: 300px; height: 100px; border-radius: 10px; margin-top: 30%; margin-left: 10px;'
             })
         }
-        
+
 def posts_view(request, page, filter):
     """ Dispaly posts """
     # Filter can be either 'not', 'following' or a username

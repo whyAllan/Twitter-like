@@ -35,18 +35,8 @@ class Post(models.Model):
     post = models.TextField()
     poster = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="posts")
     likes = models.ManyToManyField(Profile, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    reply = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="replies")  
 
     def __str__(self):
         return self.post
-
-class Replies(models.Model):
-    commenter = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
-    comment = models.TextField()
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(Profile, blank=True, related_name="comments_likes")
-
-
-    def __str__(self):
-        return self.comment

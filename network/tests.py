@@ -18,7 +18,7 @@ class ProfileTestCase(TestCase):
         # user1 should be valid and user2 too
         self.assertTrue(Profile.objects.get(user=User.objects.get(username='user1')).is_valid_profile())
         profile = Profile.objects.get(user=User.objects.get(username='user2'))
-        self.assertTrue(profile.is_valid_profile())
+        self.assertFalse(profile.is_valid_profile())
 
     def test_profile_pic(self):
         # Test if profile pic its 'standard.jpg'

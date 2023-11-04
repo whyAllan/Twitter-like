@@ -17,7 +17,7 @@ document.querySelectorAll("#edit_post").forEach((element) => {
         content = post.innerHTML;
         post.style.display = "none";
         form = document.querySelector(`#form${button}`);
-        form.innerHTML = `<textarea name="content" style="width: 100%; height: 100px;">${content}</textarea><br><button type="submit" class="btn btn-outline-success">Submit</button> `;
+        form.innerHTML = `<textarea name="content" style="width: 100%; height: 100px;">${content}</textarea><br><button type="submit" class="btn btn-outline-success">Save</button> `;
         cancel_button = document.createElement("button");
         cancel_button.className = "btn btn-outline-danger";
         cancel_button.innerHTML = "Cancel";

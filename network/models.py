@@ -15,11 +15,6 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     profile_pic = models.ImageField(upload_to="profile_pics/", blank=True)
 
-    def get_profile_pic_url(self):
-        if self.profile_pic:
-            return self.profile_pic.url
-        return settings.STATIC_URL + "standard.jpg"
-
     def __str__(self):
         return self.user.username
     # Assert that the user cannot follow themselves

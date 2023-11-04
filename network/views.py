@@ -20,6 +20,7 @@ class PostForm(forms.ModelForm):
                 'style':'width: 300px; height: 100px; border-radius: 10px; margin-top: 30%; margin-left: 10px;'
             })
         }
+        
 def posts_view(request, page, filter):
     """ Dispaly posts """
     # Filter can be either 'not', 'following' or a username

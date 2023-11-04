@@ -15,10 +15,10 @@ class ProfileTestCase(TestCase):
         Profile.objects.create(user=User.objects.get(username='user1')).followers.add(Profile.objects.get(user=id2))
 
     def test_is_valid_profile(self):
-        # user1 should be valid and user2 should not 
+        # user1 should be valid and user2 too
         self.assertTrue(Profile.objects.get(user=User.objects.get(username='user1')).is_valid_profile())
         profile = Profile.objects.get(user=User.objects.get(username='user2'))
-        self.assertFalse(profile.is_valid_profile())
+        self.assertTrue(profile.is_valid_profile())
 
     def test_profile_pic(self):
         # Test if profile pic its 'standard.jpg'

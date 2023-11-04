@@ -7,7 +7,7 @@ from django import forms
 from django.core.paginator import Paginator
 from .models import User, Profile, Post, Replies
 from django.contrib import messages
-
+import urllib.parse
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -177,3 +177,13 @@ def likes(request, post_id):
         return HttpResponse("you must be logged in")
     like = Post.objects.get(id=post_id).likes.count()
     return HttpResponse(like)
+
+def edit(request, post_id):
+    """ Edit or delete post """
+    if request.method == "PUT":
+        content = urllib.parse.unquote(request.body.decode('utf-8').split('=')[1])
+        post = Post.objects.get(id=post_id)
+        post.post = content
+        post.save()
+        return HttpResponse(f'<p class="card-text" id="post{post_id}"> {content}</p>')
+    pass

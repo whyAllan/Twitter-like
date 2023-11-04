@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
     path('tweets/<int:page>/<str:filter>/', views.posts_view, name='tweets_view'),
     path("", views.index, name="index"),
+    path("change/<int:post_id>", views.edit, name="change"),
     path("likes/<int:post_id>", views.likes, name="like"),
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),

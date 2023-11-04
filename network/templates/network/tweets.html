@@ -6,7 +6,8 @@
     {% for post in posts %}
         <div class="post">
             <div class="card" id="card_index_post">
-                <div class="card-body" id="post{{ post.id }}">
+    
+                <div class="card-body">
                     <div class="profile-photo">
                         <img src="{% if post.poster.profile_pic %}{{ post.poster.profile_pic }}{% else %}{% static 'network/images/standard.jpg' %}{% endif %}" alt="">
                     </div>
@@ -16,15 +17,22 @@
                               <!--  Edit post -->
                  {% if user.is_authenticated %}
                  {% if post.poster.user.username == request.user.username %}
-                     <small id="edit_post" data-post="post{{ post.id }}"> edit post</small>
+                     <small id="edit_post" data-post="{{ post.id }}"> edit post</small>
                  {% endif %}
                  {% endif %}
-                  <p class="card-text">{{ post.post }}</p>
+
+                  <p class="card-text" id="post{{ post.id }}">{{ post.post }}</p>
+
+                  <!-- Edit post form -->
+                  <form hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-put="{% url 'change' post.id %}" hx-target="#post{{ post.id }}" hx-swap="outerHTML">
+                    <div id="form{{ post.id }}">
+                    </div>
+                   </form>
 
                   <i id="like{{ post.id }}"> {{ post.likes.count }} </i> <small>likes </small>
                   <!-- Like button if user liked the thumbs up icon will be blue -->
                   {% if user.is_authenticated %}
-                      <i hx-get="{% url 'like' post.id %}" class="fa fa-thumbs-up" {% if request.user.profile in post.likes.all %} style="color: blue;" {% endif %} hx-swap="innerHTML" hx-target="#like{{ post.id }}" onclick="like(this)"></i>
+                      <i hx-get="{% url 'like' post.id %}" class="fa fa-thumbs-up" {% if request.user.profile in post.likes.all %} style="color: blue;" {% endif %} hx-swap="innerHTML" hx-target="#like{{ post.id }}" onclick="like(this)"> </i>
                     <script src="{% static 'network/js/tweets.js' %}"></script>
                   {% endif %}
                 </div>

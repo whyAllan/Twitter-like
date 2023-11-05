@@ -42,3 +42,12 @@ document.querySelectorAll("#edit_post").forEach((element) => {
             }
         })
     })});
+
+ // delete posts in the replyes page
+function Delete() {
+    conmation = window.confirm("Are you sure you want to delete this post?");
+    
+    if (conmation == true) {
+        document.querySelector("#delete_form").submit();
+    }
+}

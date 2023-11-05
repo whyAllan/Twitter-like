@@ -53,6 +53,11 @@ def index(request):
             post = contente.save(commit=False)
             post.poster = Profile.objects.get(user=request.user.id)
             post.save()
+        elif request.POST.get('tweet_content'):
+            post_content = request.POST.get('tweet_content')
+            post_id = request.POST.get('tweet_id')
+            Post.objects.create(post=post_content, poster=Profile.objects.get(user=request.user.id), reply=Post.objects.get(id=post_id))
+            return HttpResponseRedirect(reverse("replies", args=[post_id]))
         return HttpResponseRedirect(reverse("index"))
 
     # Display homepage
@@ -196,6 +201,10 @@ def edit(request, post_id):
         post = Post.objects.get(id=post_id)
         post.delete()
         return HttpResponse("deleted", status=200)
+    if request.method == "POST":
+        post = Post.objects.get(id=post_id)
+        post.delete()
+        return HttpResponseRedirect(reverse("index"))
     
 def replies(request, post_id):
     """ Display replies """

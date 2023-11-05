@@ -5,6 +5,7 @@
 {% endblock %}
 {% block body %}
     <div class="profile">
+     
         <div> 
             <img src="{% if profile.profile_pic %}{{ profile.profile_pic }}{% else %}{% static 'network/images/standard.jpg' %}{% endif %}" class="img-thumbnail" alt="Profile Picture" style="width: 200px; height: 200px">
         </div>
@@ -23,7 +24,8 @@
                             </form>  
                         {% endif %}
                     {% endif %}
-                    <div class="card-title">{{ profile.followers.count }} <small>followers</small> {{ profile.following.count }} <small>following</small></div>   
+                    <div class="card-title">{{ profile.followers.count }} <small data-load="followers" onclick="Load(this)" style="cursor: pointer;">followers</small> {{ profile.following.count }} <small data-load="following" onclick="Load(this)" style="cursor: pointer;">following</small></div>
+                    
                     <p class="card-text">{{ profile.bio }}</p>
                     <small>
                         {% if request.user.username == profile.user.username %}
@@ -33,6 +35,21 @@
                 </div>
         </div>
     </div>
+     <!-- Load followers and following -->
+     <div class="load_">
+        {% for user in users %}
+            <div class="card text-bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header"> {{ user.followers.count }} followers</div>
+                <div class="card-body">
+                <h5 class="card-title">{{ user.user }}</h5>
+                <p class="card-text">{{ user.bio }}</p>
+                <form action="" class="card-footer">
+                    <button type="submit"> follow </button>
+                </form>
+                </div>
+            </div>
+        {% endfor %}
+     </div>
     <!-- Display user twets -->
     <div class="posts_index">
         

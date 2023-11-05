@@ -21,7 +21,8 @@
                      <small id="delete_post" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-delete="{% url 'change' post.id %}" hx-target="#tweet{{ post.id }}" hx-confirm="Are you sure you want to delete this post?"> delete post </small>
                  {% endif %}
                  {% endif %}
-
+                    <br>
+                   {% if post.reply %}<small class="text-muted">Replied to: <a href="{% url 'replies' post.reply.id %}">@{{ post.reply.poster }}</a></small>{% endif %}
                   <p class="card-text" id="post{{ post.id }}">{{ post.post }}</p>
 
                   <!-- Edit post form -->

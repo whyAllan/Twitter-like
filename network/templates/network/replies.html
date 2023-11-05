@@ -8,6 +8,7 @@
             </div>
             <h6><div class="card-title"><a href="{% url 'profile' tweet.poster.user.username %}" style="color: grey;">@{{ tweet.poster.user.username }}</a></div></h6>
             <div class="card-text"><small class="text-muted">{{ tweet.created_at|timesince|default:"Just now"}} ago</small></div>
+                {% if tweet.reply %}<small class="text-muted">Replied to: <a href="{% url 'replies' tweet.reply.id %}">@{{ tweet.reply.poster }}</a></small>{% endif %}
                 <p class="card-text" style="background-color:beige;height: 100px;" id="post{{ tweet.id }}">{{ tweet.post }}</p>
 
                 <!-- Edit post form -->

@@ -51,3 +51,10 @@ function Delete() {
         document.querySelector("#delete_form").submit();
     }
 }
+
+// Load followers or followings
+function Load(x) {
+    f = x.dataset.load
+    console.log(f)
+    
+}

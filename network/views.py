@@ -6,7 +6,7 @@ from django.urls import reverse
 from django import forms
 from django.core.paginator import Paginator
 from .models import User, Profile, Post
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 import urllib.parse
 class PostForm(forms.ModelForm):
     class Meta:
@@ -126,6 +126,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
     
+@login_required 
 def create_profile(request):
     """ Create and update profile """
     if request.method == "POST":
@@ -166,6 +167,7 @@ def profile(request, username):
         "page": 0
     })
 
+@login_required
 def following_tweets(request):
     """ Display following tweets """
     return render(request, "network/index.html", {

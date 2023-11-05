@@ -21,14 +21,19 @@ class PostForm(forms.ModelForm):
             })
         }
 
-def posts_view(request, page, filter):
+def posts_view(request):
     """ Dispaly posts """
-    # Filter can be either 'not', 'following' or a username
-    filter = str(filter)
+    # Filter can be either 'not', 'following', 'replies' or a username
+    # key1 = page number key2 = filter key3 = tweet id
+    page = request.GET.get('key1')
+    filter = request.GET.get('key2')
     if filter == 'not':
         context = Post.objects.all().order_by("-created_at")
     elif filter == 'following':
         context =  Post.objects.filter(poster__in=Profile.objects.get(user=request.user.id).following.all()).order_by('-created_at')
+    elif filter == 'replies':
+        tweet = request.GET.get('key3')
+        context =  Post.objects.filter(reply=tweet).order_by('-created_at')
     else:
         context =  Post.objects.filter(poster=Profile.objects.get(user=User.objects.get(username=filter))).order_by('-created_at')
     paginator = Paginator(context, 10)
@@ -187,4 +192,21 @@ def edit(request, post_id):
         post.post = content
         post.save()
         return HttpResponse(f'<p class="card-text" id="post{post_id}"> {content}</p>')
-    pass
+    if request.method == "DELETE":
+        post = Post.objects.get(id=post_id)
+        post.delete()
+        return HttpResponse("deleted", status=200)
+    
+def replies(request, post_id):
+    """ Display replies """
+    if request.method == "POST":
+        content = request.POST.get("reply")
+        post = Post.objects.get(id=post_id)
+        reply = Post(post=content, poster=post.poster, reply=post)
+        reply.save()
+        return HttpResponseRedirect(reverse("index"))
+    return render(request, "network/replies.html", {
+         "page": 0,
+         "filter" : 'replies',
+         "tweet": Post.objects.get(id=post_id)
+    })

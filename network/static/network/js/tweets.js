@@ -10,7 +10,7 @@ function like(x) {
 
 // Show the edit form
 document.querySelectorAll("#edit_post").forEach((element) => {
-    element.style.cursor = "pointer"; 
+
     element.addEventListener("click", () => {
         const button = element.dataset.post;
         post = document.querySelector(`#post${button}`);
@@ -42,5 +42,3 @@ document.querySelectorAll("#edit_post").forEach((element) => {
             }
         })
     })});
-
-    

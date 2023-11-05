@@ -38,6 +38,9 @@
                   {% endif %}
                 </div>
 
+                <!-- replies -->
+                <i id="replies"><a href="{% url 'replies' post.id %}" style="color:darkslategray;">{{ post.replies.count }} replies</a></i>
+
               </div>
 
         </div>
@@ -47,7 +50,7 @@
 
     <!-- Pagination with htmx -->
     {% if posts.has_next or page == 0 %}
-        <div hx-trigger="revealed" hx-get="{% url 'tweets_view' page=page|add:1 filter=filter %}" hx-swap="afterend"></div>
+        <div hx-trigger="revealed" hx-get="{% url 'tweets_view' %}?key1={{ page|add:1 }}&key2={{ filter }}&key3={{ tweet.id }}" hx-swap="afterend"> </div>
     {% endif %}
          
     

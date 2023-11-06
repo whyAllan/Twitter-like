@@ -1,5 +1,5 @@
 function like(x) {
-    // Change the color and count of likes
+    // Change the color of likes
   if (x.style.color === "blue") {
       x.style.color = "black";
   } else {
@@ -43,7 +43,7 @@ document.querySelectorAll("#edit_post").forEach((element) => {
         })
     })});
 
- // delete posts in the replyes page
+ // delete posts on the replyes page
 function Delete() {
     conmation = window.confirm("Are you sure you want to delete this post?");
     

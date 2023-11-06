@@ -16,7 +16,6 @@ const image = document.getElementById('image-preview');
                     minCropBoxWidth: 300, // Minimum width of the crop box
                     minCropBoxHeight: 300, // Minimum height of the crop box
                     responsive: true, // Enable responsive behavior
-                    // Additional options...
                 });
 
                 saveButton.addEventListener('click', function() {

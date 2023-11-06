@@ -1,5 +1,5 @@
 function like(x) {
-    // Change the color of likes
+    // Change the color of the like button
   if (x.style.color === "blue") {
       x.style.color = "black";
   } else {

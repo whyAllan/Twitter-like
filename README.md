@@ -14,8 +14,8 @@ Network a single app application inspired by twitter/x built with Django combine
 * reply and see all the replies of one post
 
 ### Pagination
-as you may probably know the Twitter feed and the followers of a profile don't load all posts at once so neither does this project.
-* the posts and users are loaded with pagination once you get in the bottom of the page with the help of htmx combined with  Django pagination
+as you may probably know the Twitter feed doesn't load all posts at once so neither does this project.
+* the posts and users are loaded with pagination once you get to the bottom of the page with the help of htmx combined with  Django pagination
 
 
 

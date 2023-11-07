@@ -1,11 +1,12 @@
 
 from django.urls import path
 
-from . import views
+from . import views, util
 
 urlpatterns = [
-    path('tweets/', views.posts_view, name='tweets_view'),
-    path("load_users", views.load_users, name="load_users"),
+    path('tweets/', util.posts_view, name='tweets_view'),
+    path("follow_unfollow/<str:username>", util.follow_unfollow, name="follow_unfollow"),
+    path("load_users", util.load_users, name="load_users"),
     path("", views.index, name="index"),
     path("replies/<int:post_id>", views.replies, name="replies"),
     path("change/<int:post_id>", views.edit, name="change"),

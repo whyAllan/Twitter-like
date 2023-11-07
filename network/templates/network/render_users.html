@@ -2,7 +2,7 @@
 
       
     {% for user in users %}
-        <div class="card text-bg-light mb-3" style="width: 14rem;">
+        <div class="card text-bg-light mb-3" id="follow{{ user.id }}" style="width: 14rem;">
             <div class="card-body">
             <a href="{% url 'profile' user.user.username %}">
             <div class="profile-photo" style="float: left;">
@@ -14,16 +14,18 @@
             <br>
             <i class="card-text text-muted" style="float: left">{{ user.following.count }} following </i>
             <br>
-            {% if request.user.profile in user.followers.all %}<small class="text-muted" style="float: left">follows you</small>{% endif %}
+            {% if request.user.profile in user.following.all %}<small class="text-muted" style="float: left">follows you</small>{% endif %}
             <br>
-            <form hx-headers="{'X-CSRFToken': '{{ csrf_token }}'}" hx-post="{% url 'profile' user.user.username %}" hx-swap="none" style="float:inline-end;">
-                {% csrf_token %}
-                {% if request.user.profile in user.followers.all %}
-                    <button class="btn btn-outline-danger" type="submit" name="follow" value="unfollow">unfollow</button>
-                {% else %}
-                    <button class="btn btn-outline-success" type="submit" name="follow" value="follow">follow</button>
-                {% endif %}
-            </form>
+            {% if request.user.is_authenticated and user.user.username != request.user.username %}
+                <form hx-headers="{'X-CSRFToken': '{{ csrf_token }}'}" hx-post="{% url 'follow_unfollow' user.user.username %}" hx-swap="outerHTML" hx-target="#follow{{ user.id }}" style="float:inline-end;">
+                    {% csrf_token %}
+                    {% if request.user.profile in user.followers.all %}
+                        <button class="btn btn-outline-danger" type="submit" name="follow" value="unfollow">unfollow</button>
+                    {% else %}
+                        <button class="btn btn-outline-success" type="submit" name="follow" value="follow">follow</button>
+                    {% endif %}
+                </form>
+            {% endif %}
             </div>
         </div>
         {% empty %}
@@ -33,4 +35,3 @@
   {% if users.has_next %}
     <div hx-trigger="intersect once" hx-get="{% url 'load_users' %}?key1={{ profile.user.username }}&key2={{ filter }}&key3={{ pagenum|add:1 }}" hx-swap="afterend transition:true"></div>
   {% endif %}
-    <script src="{% static 'network/js/users.js' %}"></script>

@@ -233,11 +233,12 @@ def load_users(request):
     elif filter == 'followers':
        result = profile.followers.all().order_by('user__username')
 
-    pagination = Paginator(result, 10)
+    pagination = Paginator(result, 4)
     users = pagination.page(pagenum)
     # render html to be render in the profile page
     return render(request, "network/render_users.html", {
         "users": users,
         "pagenum": pagenum,
-        "filter": filter
+        "filter": filter,
+        "profile": profile
     })

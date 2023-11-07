@@ -25,8 +25,8 @@
                         {% endif %}
                     {% endif %}
                     <div class="card-title">
-                        {{ profile.followers.count }} <small hx-get="{% url 'load_users' %}?key1={{ profile.user.username }}&key2=followers&key3=1" hx-target="#users_display" hx-swap="innerHTML" style="cursor: pointer;">followers</small> 
-                        {{ profile.following.count }} <small hx-get="{% url 'load_users' %}?key1={{ profile.user.username }}&key2=following&key3=1" hx-target="#users_display" hx-swap="innerHTML" style="cursor: pointer;">following</small>
+                        {{ profile.followers.count }} <small hx-get="{% url 'load_users' %}?key1={{ profile.user.username }}&key2=followers&key3=1" hx-target=".load_" hx-swap="innerHTML" style="cursor: pointer;">followers</small> 
+                        {{ profile.following.count }} <small hx-get="{% url 'load_users' %}?key1={{ profile.user.username }}&key2=following&key3=1" hx-target=".load_" hx-swap="innerHTML" style="cursor: pointer;">following</small>
                     </div>
                     
                     <p class="card-text">{{ profile.bio }}</p>
@@ -39,7 +39,7 @@
         </div>
     </div>
      <!-- Load followers and following -->
-    <div id="users_display">
+    <div class="load_">
     </div>
     <!-- Display user twets -->
     <div class="posts_index">

@@ -7,7 +7,6 @@ import uuid
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     following = models.ManyToManyField('self', blank=True, related_name="following_to", symmetrical=False)
@@ -19,6 +18,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
     # Assert that the user cannot follow themselves
     def is_valid_profile(self):
         return not self.following.filter(user=self.user.pk).exists() and not self.followers.filter(user=self.user.pk).exists()

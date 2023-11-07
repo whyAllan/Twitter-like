@@ -1,5 +1,9 @@
 function like(x) {
+<<<<<<< HEAD
      // Change the color of the like button
+=======
+    // Change the color of the like button
+>>>>>>> 50aadcc23ad9abfb402038b9a3785cd508142df4
   if (x.style.color === "blue") {
       x.style.color = "black";
   } else {

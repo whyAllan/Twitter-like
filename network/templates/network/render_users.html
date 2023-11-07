@@ -1,0 +1,33 @@
+{% load static %}
+<div class="load_">
+      
+    {% for user in users %}
+        <div class="card text-bg-light mb-3" style="width: 14rem;">
+            <div class="card-body">
+            <a href="{% url 'profile' user.user.username %}">
+            <div class="profile-photo" style="float: left;">
+                <img src="{% if user.profile_pic %}{{ user.profile_pic }}{% else %}{% static 'network/images/standard.jpg' %}{% endif %}" alt="...">
+            </div>
+            <h5 class="card-title" style="color: black;">{{ user.user.username }}</h5></a>  
+            <hr>
+            <i class="card-text text-muted" style="float: left">{{ user.followers.count }} followers </i>
+            <br>
+            <i class="card-text text-muted" style="float: left">{{ user.following.count }} following </i>
+            <br>
+            {% if request.user.profile in user.followers.all %}<small class="text-muted" style="float: left">follows you</small>{% endif %}
+            <br>
+            <form action="" method="POST" style="float:inline-end;">
+                {% csrf_token %}
+                {% if request.user.profile in user.followers.all %}
+                    <button class="btn btn-outline-danger" name="follow" value="unfollow">unfollow</button>
+                {% else %}
+                    <button class="btn btn-outline-success" name="follow" value="follow">follow</button>
+                {% endif %}
+            </form>
+            </div>
+        </div>
+        {% empty %}
+        <p>No {{ filter }} yet</p>
+    {% endfor %}
+    <script src="{% static 'network/js/users.js' %}"></script>
+</div>

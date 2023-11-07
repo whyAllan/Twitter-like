@@ -1,5 +1,5 @@
 function like(x) {
-    // Change the color and count of likes
+     // Change the color of the like button
   if (x.style.color === "blue") {
       x.style.color = "black";
   } else {
@@ -43,18 +43,11 @@ document.querySelectorAll("#edit_post").forEach((element) => {
         })
     })});
 
- // delete posts in the replyes page
+ // delete posts on the replyes page
 function Delete() {
     conmation = window.confirm("Are you sure you want to delete this post?");
     
     if (conmation == true) {
         document.querySelector("#delete_form").submit();
     }
-}
-
-// Load followers or followings
-function Load(x) {
-    f = x.dataset.load
-    console.log(f)
-    
 }

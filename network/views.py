@@ -26,6 +26,8 @@ def posts_view(request):
     # Filter can be either 'not', 'following', 'replies' or a username
     # key1 = page number key2 = filter key3 = tweet id
     page = request.GET.get('key1')
+    if page == '':
+        page = 1
     filter = request.GET.get('key2')
     if filter == 'not':
         context = Post.objects.all().order_by("-created_at")
@@ -65,12 +67,10 @@ def index(request):
         return render(request, "network/index.html", {
         "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
-        "page": 0,
         "filter": 'not'
         })
     else:
         return render(request, "network/index.html", {
-            "page": 0,
             "filter": 'not'
         })
 
@@ -164,7 +164,6 @@ def profile(request, username):
     return render(request, "network/display_profile.html", {
         "profile": Profile.objects.get(user=User.objects.get(username=username)),
         "filter": username,
-        "page": 0
     })
 
 @login_required
@@ -174,7 +173,6 @@ def following_tweets(request):
         "profile": Profile.objects.get(user=request.user.id),
         "post_form": PostForm(),
         "filter": 'following',
-        "page": 0
     })
 
 def likes(request, post_id):
@@ -217,7 +215,29 @@ def replies(request, post_id):
         reply.save()
         return HttpResponseRedirect(reverse("index"))
     return render(request, "network/replies.html", {
-         "page": 0,
          "filter" : 'replies',
          "tweet": Post.objects.get(id=post_id)
+    })
+
+def load_users(request):
+    """ Load users with pagination conbined with htmx """
+    # key1 = profile, key2 = filter, key3 = page number
+    profile = request.GET.get('key1')
+    filter = request.GET.get('key2')
+    pagenum = request.GET.get('key3')
+    
+    profile = Profile.objects.get(user=User.objects.get(username=profile))
+    if filter == 'following':
+        result = profile.following.all().order_by('user__username')
+
+    elif filter == 'followers':
+       result = profile.followers.all().order_by('user__username')
+
+    pagination = Paginator(result, 10)
+    users = pagination.page(pagenum)
+    # render html to be render in the profile page
+    return render(request, "network/render_users.html", {
+        "users": users,
+        "pagenum": pagenum,
+        "filter": filter
     })

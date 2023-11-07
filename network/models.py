@@ -15,6 +15,8 @@ class Profile(models.Model):
     bio = models.TextField(blank=True)
     profile_pic = models.ImageField(upload_to="profile_pics/", blank=True)
 
+    
+
     def __str__(self):
         return self.user.username
     # Assert that the user cannot follow themselves

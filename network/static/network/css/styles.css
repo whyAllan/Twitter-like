@@ -108,10 +108,9 @@
   flex-direction: row;
   width: 900px;
   height: auto;
-  background-color: gray;
   overflow-x: auto;
 }
 .card {
   flex: 0 0 auto;
-  margin-right: 1rem;
+  margin-right: 10px;
 }

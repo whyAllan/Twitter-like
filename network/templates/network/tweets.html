@@ -51,7 +51,7 @@
     {% endfor %}
 
     <!-- Pagination with htmx -->
-    {% if posts.has_next or page == 0 %}
+    {% if posts.has_next or not page %}
         <div hx-trigger="revealed" hx-get="{% url 'tweets_view' %}?key1={{ page|add:1 }}&key2={{ filter }}&key3={{ tweet.id }}" hx-swap="afterend"> </div>
     {% endif %}
          
